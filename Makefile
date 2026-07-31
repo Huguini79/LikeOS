@@ -11,15 +11,21 @@ HEAD = boot/head.asm -o build/head.bin
 KERNEL_ASM = kernel/kernel.asm -o build/kernel.asm.o
 KERNEL_C = kernel/kernel.c -o build/kernel.o
 
-OBJECT_FILES = build/kernel.asm.o build/kernel.o build/console.o build/printk.o
+OBJECT_FILES = build/kernel.asm.o build/kernel.o build/console.o build/printk.o build/panic.o build/gdt.o build/traps.o build/asm.asm.o build/ioport.asm.o build/pic.o
 
 all:
 	clear
 	$(ASM) $(ASM_FLAGS) $(HEAD)
 	$(ASM) $(ASM_FLAGS2) $(KERNEL_ASM)
+	$(ASM) $(ASM_FLAGS2) kernel/asm.asm -o build/asm.asm.o
+	$(ASM) $(ASM_FLAGS2) kernel/ioport.asm -o build/ioport.asm.o
 	$(CC) $(CC_FLAGS) $(KERNEL_C)
 	$(CC) $(CC_FLAGS) kernel/console.c -o build/console.o
 	$(CC) $(CC_FLAGS) kernel/printk.c -o build/printk.o
+	$(CC) $(CC_FLAGS) kernel/panic.c -o build/panic.o
+	$(CC) $(CC_FLAGS) kernel/gdt.c -o build/gdt.o
+	$(CC) $(CC_FLAGS) kernel/traps.c -o build/traps.o
+	$(CC) $(CC_FLAGS) kernel/pic.c -o build/pic.o
 	$(LD) $(LD_FLAGS) $(OBJECT_FILES) -o build/kernelfull.o
 	$(CC) -m32 -T linker/linker.ld -o build/kernel.bin -ffreestanding -Os -nostdlib build/kernelfull.o
 	dd if=build/head.bin > LikeOS.bin

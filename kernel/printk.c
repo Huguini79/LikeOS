@@ -34,6 +34,10 @@ void printk(const char* fmt, ...)
             {
                 char argumento = va_arg(argumentos, int);
                 put_c(argumento);
+
+            } else if (fmt[i] == '%')
+            {
+                put_c(fmt[i]);
             }
 
         } else
