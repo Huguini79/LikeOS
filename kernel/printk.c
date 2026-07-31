@@ -41,4 +41,6 @@ void printk(const char* fmt, ...)
             put_c(fmt[i]);
         }
     }
+
+    va_end(argumentos);
 }
