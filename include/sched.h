@@ -28,12 +28,18 @@ enum State
     Sleep,
 };
 
+struct sigaction
+{
+    void* handler;
+};
+
 struct task_struct
 {
     long pid;
     long alarm;
     long signal;
     enum State state;
+    struct sigaction sigactions[32];
     struct registers registers;
 };
 

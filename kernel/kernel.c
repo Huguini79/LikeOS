@@ -1,3 +1,4 @@
+#include <sys/signal.h>
 #include <console.h>
 #include <sched.h>
 #include <pic.h>
@@ -11,9 +12,15 @@ void task3()
     while (1) {}
 }
 
+void alrm_handler()
+{
+    printk("This is my own handler for the ALARM in Task 2\n");
+}
+
 void task2()
 {
     printk("Task 2!\n");
+    signal(SIGALRM, alrm_handler);
     while (1) {}
 }
 
@@ -39,6 +46,9 @@ void kernel_main()
     newTask2->state = Ready;
     struct task_struct* newTask3 = initTask(3, (long)task3);
     newTask3->state = Ready;
+
+    sendsig(newTask3, SIGALRM);
+    sendsig(newTask2, SIGALRM);
     // exec(newTask);
     
     while (1)

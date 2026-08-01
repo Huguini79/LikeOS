@@ -1,3 +1,4 @@
+#include <sys/signal.h>
 #include <sched.h>
 #include <traps.h>
 #include <printk.h>
@@ -95,6 +96,11 @@ void schedule()
                 break;
             }
         }
+    }
+
+    if (current->signal != 0)
+    {
+        psig();
     }
 
     current->state = Ready;

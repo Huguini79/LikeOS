@@ -11,7 +11,7 @@ HEAD = boot/head.asm -o build/head.bin
 KERNEL_ASM = kernel/kernel.asm -o build/kernel.asm.o
 KERNEL_C = kernel/kernel.c -o build/kernel.o
 
-OBJECT_FILES = build/kernel.asm.o build/kernel.o build/console.o build/printk.o build/panic.o build/gdt.o build/traps.o build/asm.asm.o build/ioport.asm.o build/pic.o build/sched.o
+OBJECT_FILES = build/kernel.asm.o build/kernel.o build/console.o build/printk.o build/panic.o build/gdt.o build/traps.o build/asm.asm.o build/ioport.asm.o build/pic.o build/sched.o build/signal.o
 
 all:
 	clear
@@ -27,6 +27,7 @@ all:
 	$(CC) $(CC_FLAGS) kernel/traps.c -o build/traps.o
 	$(CC) $(CC_FLAGS) kernel/pic.c -o build/pic.o
 	$(CC) $(CC_FLAGS) kernel/sched.c -o build/sched.o
+	$(CC) $(CC_FLAGS) kernel/signal.c -o build/signal.o
 	$(LD) $(LD_FLAGS) $(OBJECT_FILES) -o build/kernelfull.o
 	$(CC) -m32 -T linker/linker.ld -o build/kernel.bin -ffreestanding -Os -nostdlib build/kernelfull.o
 	dd if=build/head.bin > LikeOS.bin
