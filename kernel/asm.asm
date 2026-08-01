@@ -1,4 +1,3 @@
-
 global divide_by_zero_error_stub
 extern divide_by_zero_error
 
@@ -9,19 +8,21 @@ global clock_handler_stub
 extern clock_handler
 
 divide_by_zero_error_stub:
-    pusha
+    pushad
     call divide_by_zero_error
-    popa
+    popad
     iretd
 
 keyboard_handler_stub:
-    pusha
+    pushad
     call keyboard_handler
-    popa
+    popad
     iretd
 
 clock_handler_stub: ; Si el sistema no funciona, revisar aquí por favor
-    pusha
+    pushad
+    push esp
     call clock_handler
-    popa
+    add esp, 4
+    popad
     iret

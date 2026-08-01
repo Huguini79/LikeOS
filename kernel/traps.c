@@ -1,6 +1,8 @@
 #include <printk.h>
 #include <ioport.h>
 #include <panic.h>
+#include <traps.h>
+#include <sched.h>
 
 struct Idt
 {
@@ -50,10 +52,13 @@ void keyboard_handler()
 
 volatile long ticks = 0;
 
-void clock_handler()
+void clock_handler(struct interrupt_frame* frame)
 {
-    ticks += 10;
     outb(0x20, 0x20);
+    ticks += 10;
+    printk("EAX: %i, EIP: %i, TICKS: %i", frame->eax, frame->eip, ticks);
+    saveContext(frame);
+    schedule();
 }
 
 void TrapsInstall()

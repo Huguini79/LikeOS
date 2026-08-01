@@ -3,15 +3,15 @@ CC = i686-elf-gcc
 LD = i686-elf-ld
 QEMU = qemu-system-i386
 
-LD_FLAGS = -m elf_i386 -g -relocatable
+LD_FLAGS = -m elf_i386 -Map=kernel.map -g -relocatable
 ASM_FLAGS = -f bin
 ASM_FLAGS2 = -f elf32
-CC_FLAGS = -I./include -c -m32 -g -ffreestanding -fno-pie -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -Wno-unused-function -fno-builtin -Werror -Wno-unused-label -Wno-cpp -Wno-unused-parameter -nostdlib -nostartfiles -nodefaultlibs -Wall -Os -Iinc
+CC_FLAGS = -I./include -c -m32 -g -ffreestanding -fno-pie -falign-jumps -falign-functions -falign-labels -falign-loops -fstrength-reduce -fomit-frame-pointer -finline-functions -Wno-unused-function -fno-builtin -Werror -Wno-unused-label -Wno-cpp -Wno-unused-parameter -nostdlib -nostartfiles -nodefaultlibs -Wall -Os -Iinc -Wno-int-conversion
 HEAD = boot/head.asm -o build/head.bin
 KERNEL_ASM = kernel/kernel.asm -o build/kernel.asm.o
 KERNEL_C = kernel/kernel.c -o build/kernel.o
 
-OBJECT_FILES = build/kernel.asm.o build/kernel.o build/console.o build/printk.o build/panic.o build/gdt.o build/traps.o build/asm.asm.o build/ioport.asm.o build/pic.o
+OBJECT_FILES = build/kernel.asm.o build/kernel.o build/console.o build/printk.o build/panic.o build/gdt.o build/traps.o build/asm.asm.o build/ioport.asm.o build/pic.o build/sched.o
 
 all:
 	clear
@@ -26,6 +26,7 @@ all:
 	$(CC) $(CC_FLAGS) kernel/gdt.c -o build/gdt.o
 	$(CC) $(CC_FLAGS) kernel/traps.c -o build/traps.o
 	$(CC) $(CC_FLAGS) kernel/pic.c -o build/pic.o
+	$(CC) $(CC_FLAGS) kernel/sched.c -o build/sched.o
 	$(LD) $(LD_FLAGS) $(OBJECT_FILES) -o build/kernelfull.o
 	$(CC) -m32 -T linker/linker.ld -o build/kernel.bin -ffreestanding -Os -nostdlib build/kernelfull.o
 	dd if=build/head.bin > LikeOS.bin

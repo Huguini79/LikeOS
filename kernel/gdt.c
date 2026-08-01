@@ -34,8 +34,8 @@ void setGdtDescriptor(long n, unsigned short limit, long base, unsigned char acc
 void GdtInstall()
 {
     setGdtDescriptor(0, 0, 0, 0, 0);
-    setGdtDescriptor(1, 0x100000 & 0xFFFF, 0x000000, 0x9B, 0xCF);
-    setGdtDescriptor(2, 0x200000 & 0xFFFF, 0x100001, 0x93, 0xCF);
+    setGdtDescriptor(1, 0xFFFF, 0, 0x9B, 0xCF);
+    setGdtDescriptor(2, 0xFFFF, 0, 0x93, 0xCF);
 
     gdtr.limit = sizeof(gdt_table) - 1;
     gdtr.base = (long)gdt_table;
