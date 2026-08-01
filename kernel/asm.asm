@@ -1,6 +1,9 @@
 global divide_by_zero_error_stub
 extern divide_by_zero_error
 
+global double_fault_stub
+extern double_fault
+
 global keyboard_handler_stub
 extern keyboard_handler
 
@@ -10,6 +13,13 @@ extern clock_handler
 divide_by_zero_error_stub:
     pushad
     call divide_by_zero_error
+    popad
+    iretd
+
+double_fault_stub:
+    pushad
+    call double_fault
+    add esp, 4
     popad
     iretd
 

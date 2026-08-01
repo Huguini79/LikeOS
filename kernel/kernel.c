@@ -43,8 +43,6 @@ void kernel_main()
     
     while (1)
     {
-        put_cxy('A', 73, 0);
-        put_cxy('B', 73, 0);
-        __asm__ volatile ("sti; hlt");
+        __asm__ volatile ("sti");
     }
 }
